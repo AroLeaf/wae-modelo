@@ -9,7 +9,7 @@
     </div>
 
     <ul class="nav-links" :class="{ open: isOpen }">
-      <li><a href="#">Home</a></li>
+      <li><a href="filter.html">filter</a></li>
       <li><a href="#">Over</a></li>
       <li><a href="#">Diensten</a></li>
       <li><a href="#">Contact</a></li>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script type="module" src="./filter.js" defer></script>
+        <style>
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(12, 1fr);
+                gap: 8px;
+                padding: 20px;
+            }
+
+            .cell {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+            }
+
+            .header {
+                font-weight: bold;
+                background-color: #f0f0f0;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div id="app">
+            <div class="grid">
+            <!-- Headers -->
+                <div v-for="header in headers" class="cell header" :key="header">
+                    {{ formatHeader(header) }}
+                </div>
+
+                <!-- Data cells (flattened) -->
+                <div v-for="row in data" :key="row.station">
+                    <template v-for="header in headers" :key="header + row.station">
+                        <div class="cell">{{ row[header] }}</div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
