@@ -1,0 +1,12 @@
+{
+    "discord.detailsEditing": "",
+    "discord.detailsDebugging": "",
+    "discord.largeImage": "Editing a {LANG} file",
+    "discord.largeImageIdling": "",
+    "discord.lowerDetailsDebugging": "",
+    "discord.lowerDetailsEditing": "",
+    "discord.lowerDetailsNoWorkspaceFound": "",
+    "discord.removeRemoteRepository": true,
+    "discord.removeLowerDetails": true,
+    "discord.smallImage": ""
+}
