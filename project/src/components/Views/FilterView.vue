@@ -6,6 +6,10 @@ import NavBar from '../NavBar.vue'
     <NavBar />
      <body>
         <div id="app">
+          <div class="filters">
+
+          </div>
+          <div class="grid-wrapper">
             <div class="grid">
             <!-- Headers -->
                 <div v-for="header in headers" class="cell header" :key="header">
@@ -19,6 +23,7 @@ import NavBar from '../NavBar.vue'
                     </template>
                 </div>
             </div>
+          </div>
         </div>
     </body>
 </template>
@@ -195,20 +200,34 @@ export default {
 </script>
 
 <style scoped>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 8px;
-    padding: 20px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px;
+  padding: 10px;
+  margin-top: 50px;
+
+}
+.grid-wrapper{
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .cell {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
 }
 
 .header {
-    font-weight: bold;
-    background-color: #f0f0f0;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+.filters {
+  position: fixed;
+}
+#app {
+  height: 100vh;
+  width: 100vw;
 }
 </style>
