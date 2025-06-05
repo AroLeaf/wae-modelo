@@ -9,10 +9,11 @@
     </div>
 
     <ul class="nav-links" :class="{ open: isOpen }">
-      <li><a href="filter.html">filter</a></li>
-      <li><a href="#">Over</a></li>
-      <li><a href="#">Diensten</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><RouterLink to="/">Home</RouterLink></li>
+      <li><RouterLink to="/data">Data</RouterLink></li>
+      <li><RouterLink to="#">Over</RouterLink></li>
+      <li><RouterLink to="#">Diensten</RouterLink></li>
+      <li><RouterLink to="#">Contact</RouterLink></li>
       <!-- <li @click="toggleDropdown" class="has-dropdown"> -->
         
         <!-- <ul class="dropdown" :class="{ show: dropdownOpen }">
