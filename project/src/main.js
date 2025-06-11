@@ -3,7 +3,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 
 import HomeView from './components/Views/HomeView.vue'
 import LoginView from './components/Views/LoginView.vue'
-import FilterView from './components/Data.vue'
+import FilterView from './components/DataFilter.vue'
 
 const routes = [
     { path: '/', component: HomeView },
