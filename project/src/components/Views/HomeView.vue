@@ -5,7 +5,6 @@ import Top10 from '../Top10.vue';
 </script>
 
 <template>
-  <NavBar/>
   <main>
     <MexicoMap/>
     <div class="dataContainer">
