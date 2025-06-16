@@ -55,7 +55,7 @@ div.data {
 div.map {
   width: 100%;
   height: 80vh;
-  margin-bottom: 10vh;
+  margin: 5vh 5vw;
 }
 
 @media (max-width: 1000px) {
@@ -74,9 +74,10 @@ div.map {
   }
 
   div.map {
-  width: 100%;
-  height: 40vh;
-  margin-bottom: 5vh;
-}
+    width: 100%;
+    height: 40vh;
+    margin-bottom: 5vh;
+    margin: 0;
+  }
 }
 </style>
