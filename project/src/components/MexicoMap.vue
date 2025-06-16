@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import datatest from '../assets/datatest.json';
+import datatest from '../../../IWA/data/datatest.json'
 
 const dataMap = datatest.MexicoStates.map(state =>({
   name: state.name,
@@ -19,7 +19,7 @@ const chartOptions = ref({
     top: 'bottom',
     text: ['Hot', 'Cold'],
     inRange: {
-      color: ['#d4f08d','#ffe37d','#c9774b','#8a220f', '#260302']
+      color: ['#d4f08d','#ffe37d', '#ffc74f','#c9774b','#8a220f', '#260302']
     },
   },
   series: [
@@ -38,7 +38,9 @@ const chartOptions = ref({
 </script>
 
 <template>
-    <v-chart :option="chartOptions" style="width: 100%; height: 40vh; margin-bottom: 10vh;" />
+  <div class="map">
+    <v-chart :option="chartOptions" />
+  </div>
 </template>
 
 

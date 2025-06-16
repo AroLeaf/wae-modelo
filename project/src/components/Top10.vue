@@ -1,5 +1,5 @@
 <script setup>
-    import datatest from '../assets/datatest.json';
+    import datatest from '../../../IWA/data/datatest.json'
 
     const sortedMap = datatest.MexicoStates
     .map(state => ({
@@ -9,9 +9,19 @@
     .sort((a, b) => b.temperature - a.temperature);
 </script>
 <template>
-    <div v-for="(state, index) in sortedMap" :key="state.name" style="list-style-type:none;">
-        <li v-if="index < 10">
-            {{index + 1 }}. {{ state.name }} {{state.temperature}}°C
-        </li>
+    <div>
+        <div v-for="(state, index) in sortedMap" :key="state.name" style="list-style-type:none;">
+            <li v-if="index < 5">
+                <b>{{index + 1 }}.</b> {{ state.name }} {{state.temperature}}°C
+            </li>
+        </div>
+    </div>
+
+    <div>
+        <div v-for="(state, index) in sortedMap" :key="state.name" style="list-style-type:none;">
+            <li v-if="4 < index && index < 10">
+                <b>{{index + 1 }}.</b> {{ state.name }} {{state.temperature}}°C
+            </li>
+        </div>
     </div>
 </template>
