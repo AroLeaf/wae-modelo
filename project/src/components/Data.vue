@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
 
 const headers= ref ([
   'station',
@@ -201,6 +201,41 @@ function sortBy(header) {
   })
 }
 
+async function fetchData(){
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJhZG1pbiI6dHJ1ZX0.-fZzT0OTXW_W17FU2NGIc0LpD-DYcl0lhQjXLuZ_UUg';
+  try {
+    const response = await fetch('/queries/WAE/0', {
+      headers: {
+        'Authorization': token
+      }
+    })
+    if (!response.ok) {
+      console.error('fout bij ophalen data: ', response.statusText);
+      return;
+    }
+    const newMeasurements = await response.json();
+    //check on dubble data
+    newMeasurements.forEach(item => {
+      if (!data.value.some(d => d.timestamp === item.timestamp && d.station === item.station)) {
+        data.value.push(item);
+      }
+    });
+  } catch (err){
+    console.error('fetch error', err);
+  }
+}
+
+let intervalId = null;
+
+onMounted(() => {
+  fetchData();
+  intervalId = setInterval(fetchData, 5000);
+});
+
+onBeforeUnmount(() => {
+  if (intervalId) clearInterval(intervalId);
+});
+
 const downloadXML = () => {
   const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
   const rows = filteredData.value.map(row => {
@@ -299,7 +334,7 @@ const formatHeader = (header) => {
   grid-template-columns: repeat(12, 1fr);
   gap: 8px;
 
-  margin-top: 50px;
+  margin-top: 5px;
 
 }
 
@@ -323,15 +358,11 @@ const formatHeader = (header) => {
   display: flex;
   gap: 1rem;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  background-color: #aaaaaa;
+  padding: 10px;
+}
 
-}
-.topPage > div {
-  border: 1px solid #aaa;
-  padding: 0.5rem;
-  border-radius: 6px;
-  background-color: #fff;
-}
 
 .stationfilter {
   order: 1;
