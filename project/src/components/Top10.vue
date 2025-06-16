@@ -1,13 +1,17 @@
 <script setup>
-    import { ref } from 'vue';
-    
-    const top10temps =  ref([
-        {key: 1, name: "Durango", temp: 35},
-        {key: 2, name: "Sonora", temp: 33}
-    ]);
+    import datatest from '../assets/datatest.json';
+
+    const sortedMap = datatest.MexicoStates
+    .map(state => ({
+        name: state.name,
+        temperature: state.temperature
+    }))
+    .sort((a, b) => b.temperature - a.temperature);
 </script>
 <template>
-    <p v-for="{temp, name, key} in top10temps">
-        {{key + ". " + name + ": " + temp}}
-    </p>
+    <div v-for="(state, index) in sortedMap" :key="state.name" style="list-style-type:none;">
+        <li v-if="index < 10">
+            {{index + 1 }}. {{ state.name }} {{state.temperature}}°C
+        </li>
+    </div>
 </template>
