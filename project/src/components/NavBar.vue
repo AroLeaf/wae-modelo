@@ -11,18 +11,7 @@
     <ul class="nav-links" :class="{ open: isOpen }">
       <li><RouterLink to="/">Home</RouterLink></li>
       <li><RouterLink to="/data">Data</RouterLink></li>
-      <li><RouterLink to="#">Over</RouterLink></li>
-      <li><RouterLink to="#">Diensten</RouterLink></li>
-      <li><RouterLink to="#">Contact</RouterLink></li>
-      <!-- <li @click="toggleDropdown" class="has-dropdown"> -->
-        
-        <!-- <ul class="dropdown" :class="{ show: dropdownOpen }">
-          
-          <li><a href="#">Webdesign</a></li>
-          <li><a href="#">SEO</a></li>
-          <li><a href="#">Marketing</a></li>
-        </ul> -->
-      <!-- </li> -->
+      <li><RouterLink to="/usermanagement">User Management</RouterLink></li>
     </ul>
   </nav>
 </template>
@@ -31,20 +20,9 @@
 import { ref } from 'vue'
 
 const isOpen = ref(false)
-const dropdownOpen = ref(false)
 
 function toggleMenu() {
   isOpen.value = !isOpen.value
-  if (!isOpen.value) {
-    dropdownOpen.value = false 
-  }
-}
-
-function toggleDropdown(event) {
-  if (window.innerWidth <= 768) {
-    event.stopPropagation()
-    dropdownOpen.value = !dropdownOpen.value
-  }
 }
 </script>
 
