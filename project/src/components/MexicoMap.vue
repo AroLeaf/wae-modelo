@@ -1,5 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import datatest from '../../../IWA/data/datatest.json'
+
+const dataMap = datatest.MexicoStates.map(state =>({
+  name: state.name,
+  value: state.temperature
+}))
 
 const chartOptions = ref({
   tooltip: {
@@ -7,13 +13,13 @@ const chartOptions = ref({
     formatter: '{b}<br/>Temperature: {c}°C'
   },
   visualMap: {
-    min: -10,
+    min: 15,
     max: 40,
     left: 'left',
     top: 'bottom',
     text: ['Hot', 'Cold'],
     inRange: {
-      color: ['#c7ffd3', '#b80012']
+      color: ['#d4f08d','#ffe37d', '#ffc74f','#c9774b','#8a220f', '#260302']
     },
   },
   series: [
@@ -25,17 +31,16 @@ const chartOptions = ref({
       label: {
         show: false
       },
-      data: [
-        { name: 'Guerrero', value: 30 },
-        { name: 'Tabasco', value: 20 } 
-      ]
+      data: dataMap
     }
   ]
 })
 </script>
 
 <template>
-    <v-chart :option="chartOptions" style="width: 100%; height: 35vh; margin-bottom: 15vh;" />
+  <div class="map">
+    <v-chart :option="chartOptions" />
+  </div>
 </template>
 
 
