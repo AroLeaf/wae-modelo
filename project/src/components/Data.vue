@@ -181,10 +181,8 @@ const filteredData = computed(() => {
   return filtered;
 });
 
-
 const sortKey = ref('timestamp');
 const ascKey = ref(false);
-
 
 function sortBy(header) {
   if (sortKey.value === header) {
@@ -201,8 +199,39 @@ function sortBy(header) {
         ? valA - valB
         : valB - valA
   })
-
 }
+
+const downloadXML = () => {
+  const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  const rows = filteredData.value.map(row => {
+    return `
+  <row>
+    <station>${row.station}</station>
+    <timestamp>${row.timestamp}</timestamp>
+    <temperature>${row.temperature}</temperature>
+    <dewpoint_temperature>${row.dewpoint_temperature}</dewpoint_temperature>
+    <air_pressure_station>${row.air_pressure_station}</air_pressure_station>
+    <air_pressure_sea_level>${row.air_pressure_sea_level}</air_pressure_sea_level>
+    <visibility>${row.visibility}</visibility>
+    <wind_speed>${row.wind_speed}</wind_speed>
+    <percipation>${row.percipation}</percipation>
+    <snow_depth>${row.snow_depth}</snow_depth>
+    <cloud_cover>${row.cloud_cover}</cloud_cover>
+    <wind_direction>${row.wind_direction}</wind_direction>
+  </row>`;
+  }).join('');
+
+  const xml = `${xmlHeader}<data>${rows}\n</data>`;
+  const blob = new Blob([xml], { type: 'application/xml' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'filtered-data.xml';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
 
 const formatHeader = (header) => {
   const text = header.replace(/_/g, ' ')
@@ -214,7 +243,7 @@ const formatHeader = (header) => {
 <template>
   <body>
   <div id="app">
-    <div class="filters">
+    <div class="topPage">
       <div class="datefilter">
         <label>
           Begin datum:
@@ -231,6 +260,9 @@ const formatHeader = (header) => {
             v-model="stationFilter"
             placeholder="Filter op station nummer"
         />
+      </div>
+      <div class="downloadXML">
+        <button @click="downloadXML">Download als XML</button>
       </div>
     </div>
     <div class="grid-wrapper">
@@ -287,14 +319,14 @@ const formatHeader = (header) => {
   cursor: pointer;
 }
 
-.filters {
+.topPage {
   display: flex;
   gap: 1rem;
   align-items: center;
   justify-content: flex-start;
 
 }
-.filters > div {
+.topPage > div {
   border: 1px solid #aaa;
   padding: 0.5rem;
   border-radius: 6px;
@@ -307,6 +339,9 @@ const formatHeader = (header) => {
 
 .datefilter {
   order: 2;
+}
+.downloadXML {
+  order: 3
 }
 
 #app {
