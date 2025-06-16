@@ -152,10 +152,12 @@ const data = ref([
 const startDate = ref('');
 const endDate = ref('');
 const stationFilter = ref('')
+const displayLimit = ref(50);
 
-const filteredData = computed(() => {
-  let filtered = data.value
+const sortedFilteredData = computed(() => {
+  let filtered = data.value;
 
+  // Filtering zoals eerder
   if (startDate.value || endDate.value) {
     filtered = filtered.filter(row => {
       const rowDate = new Date(row.timestamp);
@@ -178,7 +180,22 @@ const filteredData = computed(() => {
     );
   }
 
-  return filtered;
+  // Sorteren
+  filtered = [...filtered].sort((a, b) => {
+    const valA = a[sortKey.value];
+    const valB = b[sortKey.value];
+
+    if (typeof valA === 'number' && typeof valB === 'number') {
+      return ascKey.value ? valA - valB : valB - valA;
+    } else {
+      return ascKey.value
+          ? String(valA).localeCompare(String(valB))
+          : String(valB).localeCompare(String(valA));
+    }
+  });
+
+  // Beperk tot 50 items
+  return filtered.slice(0, displayLimit.value);
 });
 
 const sortKey = ref('timestamp');
@@ -204,7 +221,7 @@ function sortBy(header) {
 async function fetchData(){
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJhZG1pbiI6dHJ1ZX0.-fZzT0OTXW_W17FU2NGIc0LpD-DYcl0lhQjXLuZ_UUg';
   try {
-    const response = await fetch('/queries/WAE/0', {
+    const response = await fetch('http://localhost:3000/queries/WAE/0', {
       headers: {
         'Authorization': token
       }
@@ -276,17 +293,16 @@ const formatHeader = (header) => {
 
 
 <template>
-  <body>
   <div id="app">
     <div class="topPage">
       <div class="datefilter">
         <label>
-          Begin datum:
-          <input type="date" v-model="startDate"/>
+          Begin datum/tijd:
+          <input type="datetime-local" v-model="startDate"/>
         </label><br>
         <label>
-          Eind datum:
-          <input type="date" v-model="endDate"/>
+          Eind datum/tijd:
+          <input type="datetime-local" v-model="endDate"/>
         </label>
       </div>
       <div class="stationfilter">
@@ -299,6 +315,18 @@ const formatHeader = (header) => {
       <div class="downloadXML">
         <button @click="downloadXML">Download als XML</button>
       </div>
+      <div class="displayLimit">
+        <label>
+          Aantal datapunten tonen:
+          <input
+              type="number"
+              v-model.number="displayLimit"
+              min="1"
+              max="1000"
+          />
+        </label>
+      </div>
+
     </div>
     <div class="grid-wrapper">
       <div class="grid">
@@ -311,7 +339,7 @@ const formatHeader = (header) => {
         </div>
 
         <!-- Data cells (flattened) -->
-        <template v-for="row in filteredData" :key="row.station">
+        <template v-for="row in sortedFilteredData" :key="`${row.station}-${row.timestamp}`">
           <div v-for="header in headers" class="cell" :key="header + row.station">
             {{
               header === 'timestamp'
@@ -323,7 +351,6 @@ const formatHeader = (header) => {
       </div>
     </div>
   </div>
-  </body>
 </template>
 
 
@@ -339,8 +366,9 @@ const formatHeader = (header) => {
 }
 
 .grid-wrapper {
-  overflow-x: auto;
+  max-height: 70vh;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .cell {
@@ -359,8 +387,12 @@ const formatHeader = (header) => {
   gap: 1rem;
   align-items: center;
   justify-content: center;
+  background-color: #cccccc;
+  padding: 4px;
+}
+.topPage > div {
   background-color: #aaaaaa;
-  padding: 10px;
+  padding: 5px;
 }
 
 
@@ -372,11 +404,13 @@ const formatHeader = (header) => {
   order: 2;
 }
 .downloadXML {
-  order: 3
+  order: 3;
+}
+.displayLimit {
+  order: 4;
 }
 
 #app {
-  height: 100vh;
   width: 100vw;
   padding: 10px;
 }
