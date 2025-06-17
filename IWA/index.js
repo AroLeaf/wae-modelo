@@ -136,7 +136,7 @@ fastify.patch('/users/:name', async (request, response) => {
   if (!user) return response.code(401).send('you need to be an admin to modify users');
   if (!user.admin) return response.code(403).send('you need to be an admin to modify users');
 
-  const found = users.find(u => u.name === request.query.name);
+  const found = users.find(u => u.name === request.params.name);
   if (!found) return response.code(404).send('user not found');
 
   Object.assign(found, request.body);

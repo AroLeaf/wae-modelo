@@ -9,7 +9,7 @@
     </div>
 
     <ul class="nav-links" :class="{ open: isOpen }">
-      <li><RouterLink to="/">Home</RouterLink></li>
+      <li><RouterLink to="/home">Home</RouterLink></li>
       <li><RouterLink to="/data">Data</RouterLink></li>
       <li><RouterLink to="/usermanagement">User Management</RouterLink></li>
     </ul>
