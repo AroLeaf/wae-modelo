@@ -12,7 +12,6 @@ function randomFloat(min, max) {
   return Math.random() * (max-min) + min;
 }
 
-
 const jwt = new JWT(process.env.JWT_SECRET);
 
 const fastify = Fastify({
@@ -20,8 +19,12 @@ const fastify = Fastify({
   logger: false,
 });
 
-fastify.register(FastifyCors);
-
+await fastify.register(FastifyCors, {
+  origin: true,
+  credentials: true, 
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+});
 
 fastify.get('/stations', () => {
   return Object.values(stations);
@@ -112,7 +115,7 @@ fastify.get('/users/:name', async (request, response) => {
   const user = jwt.verify(request.headers.authorization);
   if (!user) return response.code(401).send('you need to be logged in to view users');
 
-  const found = users.find(u => u.name === request.query.name);
+  const found = users.find(u => u.name === request.params.name);
   const sanitized = { ...found };
   if (!user.admin) delete sanitized.password;
 
@@ -149,7 +152,7 @@ fastify.delete('/users/:name', async (request, response) => {
   if (!user) return response.code(401).send('you need to be an admin to delete users');
   if (!user.admin) return response.code(403).send('you need to be an admin to delete users');
 
-  const idx = users.findIndex(u => u.name === request.query.name);
+  const idx = users.findIndex(u => u.name === request.params.name);
   if (idx < 0) return response.code(404).send('user not found');
   
   users.splice(idx, 1);

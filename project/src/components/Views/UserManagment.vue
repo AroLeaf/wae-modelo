@@ -99,10 +99,18 @@ async function fetchUsers() {
 
 function enableEdit(index) { editMode[index] = true; }
 function cancelEdit(index) { editMode[index] = false; fetchUsers(); }
-async function saveUser(index) { 
-  changepassword();
-  editMode[index] = false; fetchUsers(); 
+async function saveUser(index) {
+  const user = users[index];
+  try {
+    await changepassword(user.name, user.password);
+    message.value = `Password updated for ${user.name}`;
+  } catch (e) {
+    error.value = e.message;
+  }
+  editMode[index] = false;
+  fetchUsers();
 }
+
 
 async function createUser() {
   error.value = '';
@@ -163,8 +171,8 @@ async function deleteUser(name) {
 
 async function changepassword(name, newPassword) {
   const res = await fetch(`${API_BASE}/users/${encodeURIComponent(name)}`, {
-    method: 'PUT',
-    headers: getHeaders(true),  
+    method: 'PATCH',
+    headers: getHeadersWithBody(true),  
     body: JSON.stringify({ password: newPassword }),
   });
 
