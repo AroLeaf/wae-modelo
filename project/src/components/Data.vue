@@ -156,8 +156,7 @@ const displayLimit = ref(50);
 
 const sortedFilteredData = computed(() => {
   let filtered = data.value;
-
-  // Filtering zoals eerder
+  // filter
   if (startDate.value || endDate.value) {
     filtered = filtered.filter(row => {
       const rowDate = new Date(row.timestamp);
@@ -180,7 +179,7 @@ const sortedFilteredData = computed(() => {
     );
   }
 
-  // Sorteren
+  // Sort
   filtered = [...filtered].sort((a, b) => {
     const valA = a[sortKey.value];
     const valB = b[sortKey.value];
@@ -194,7 +193,6 @@ const sortedFilteredData = computed(() => {
     }
   });
 
-  // Beperk tot 50 items
   return filtered.slice(0, displayLimit.value);
 });
 
@@ -404,10 +402,10 @@ const formatHeader = (header) => {
   order: 2;
 }
 .downloadXML {
-  order: 3;
+  order: 4;
 }
 .displayLimit {
-  order: 4;
+  order: 3;
 }
 
 #app {
