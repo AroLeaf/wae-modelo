@@ -8,10 +8,11 @@
       <span></span>
     </div>
 
-    <ul class="nav-links" :class="{ open: isOpen }">
-      <li><RouterLink to="/home">Home</RouterLink></li>
-      <li><RouterLink to="/data">Data</RouterLink></li>
-      <li><RouterLink to="/usermanagement">User Management</RouterLink></li>
+    <ul  class="nav-links" :class="{ open: isOpen }">
+      <li><RouterLink v-if="authenticated" to="/home">Home</RouterLink></li>
+      <li><RouterLink v-if="authenticated" to="/data">Data</RouterLink></li>
+      <li><RouterLink v-if="authenticated" to="/usermanagement">User Management</RouterLink></li>
+      <li><RouterLink v-if="authenticated" to="/" @click="logout">Log out</RouterLink></li>
     </ul>
   </nav>
 </template>
@@ -21,9 +22,18 @@ import { ref } from 'vue'
 
 const isOpen = ref(false)
 
+const emit = defineEmits(['logout']);
+
+const props = defineProps(['authenticated']);
+
 function toggleMenu() {
   isOpen.value = !isOpen.value
 }
+
+function logout() {
+    localStorage.removeItem('token');
+    emit('logout')
+  }
 </script>
 
 <style scoped>
@@ -85,7 +95,6 @@ function toggleMenu() {
 
 .nav-links li a {
   color: white;
-  text-decoration: none;
   font-size: 1.1rem;
 }
 
