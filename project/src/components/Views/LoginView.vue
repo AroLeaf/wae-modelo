@@ -11,6 +11,8 @@ const loginPassword = ref('');
 const loading = ref(false);
 const error = ref('');
 
+const emit = defineEmits(['authenticated']);
+
 async function login() {
   error.value = '';
   loading.value = true;
@@ -33,6 +35,7 @@ async function login() {
   } catch (err) {
     error.value = 'Login mislukt. Probeer het opnieuw.';
   } finally {
+    emit('authenticated');
     loading.value = false;
   }
 }

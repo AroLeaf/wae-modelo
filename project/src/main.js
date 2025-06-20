@@ -18,7 +18,7 @@ const routes = [
       if (token) {
         next();
       } else {
-        next('/'); 
+        next(from); 
       }
     }
   }
