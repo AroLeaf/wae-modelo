@@ -217,9 +217,9 @@ function sortBy(header) {
 }
 
 async function fetchData(){
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJhZG1pbiI6dHJ1ZX0.-fZzT0OTXW_W17FU2NGIc0LpD-DYcl0lhQjXLuZ_UUg';
+  const token = localStorage.getItem('token');
   try {
-    const response = await fetch('http://localhost:3000/queries/WAE/0', {
+    const response = await fetch('http://localhost:8080/queries/WAE/0', {
       headers: {
         'Authorization': token
       }
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
 
 const downloadXML = () => {
   const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  const rows = filteredData.value.map(row => {
+  const rows = sortedFilteredData.value.map(row => {
     return `
   <row>
     <station>${row.station}</station>
@@ -336,7 +336,6 @@ const formatHeader = (header) => {
                     </span>
         </div>
 
-        <!-- Data cells (flattened) -->
         <template v-for="row in sortedFilteredData" :key="`${row.station}-${row.timestamp}`">
           <div v-for="header in headers" class="cell" :key="header + row.station">
             {{
@@ -382,6 +381,7 @@ const formatHeader = (header) => {
 
 .topPage {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
   justify-content: center;
