@@ -38,6 +38,7 @@ div.dataContainer {
   padding: 1.5vh 3vw;
   min-height: 30vw;
   height: 100vh;
+  min-width: 25vw;
   align-items: center;
   margin: 1%;
 }

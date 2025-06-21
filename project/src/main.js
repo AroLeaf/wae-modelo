@@ -52,7 +52,7 @@ import mexicoMap from './assets/mexico.geo.json'
 echarts.registerMap('Mexico', mexicoMap)
 
 const app = createApp(App)
-app.component('v-chart', VueECharts)
+app.component('map-chart', VueECharts)
 app.use(router)
 app.mount('#app')
 
