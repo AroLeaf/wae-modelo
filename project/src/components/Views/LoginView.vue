@@ -42,31 +42,57 @@ async function login() {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto mt-20 p-6 border rounded shadow">
-    <h2 class="text-xl font-bold mb-4">Login</h2>
-
-    <div class="mb-4">
-      <label class="block mb-1">Gebruikersnaam</label>
-      <input v-model="loginName" type="text" class="w-full border p-2 rounded" />
+  <div class="loginwrapper">
+    
+    <div class="formwrapper">
+      <h2>Log in</h2>
+      <p v-if="error" class="error"> <strong>{{ error }}</strong></p>
+      <form>
+        <input v-model="loginName" type="text" placeholder="username"/>
+        <input v-model="loginPassword" type="password" placeholder="password" />
+        <button @click="login" :disabled="loading">
+          {{ loading ? 'logging in...' : 'Login' }}
+        </button>
+      </form>
     </div>
-
-    <div class="mb-4">
-      <label class="block mb-1">Wachtwoord</label>
-      <input v-model="loginPassword" type="password" class="w-full border p-2 rounded" />
-    </div>
-
-    <button
-      @click="login"
-      :disabled="loading"
-      class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-    >
-      {{ loading ? 'Bezig met inloggen...' : 'Login' }}
-    </button>
-
-    <p v-if="error" class="mt-4 text-red-600">{{ error }}</p>
   </div>
 </template>
 
 <style scoped>
-/* Optioneel: extra styling */
+  input[type="text"], input[type="password"] {
+  padding: 6px;
+  margin: 4px 0;
+}
+
+.loginwrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  flex-direction: column-reverse;
+}
+
+h2 {
+  text-align: center;
+}
+
+.formwrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  text-align: center;
+  color: red;
+}
+
+@media (max-width: 1000px) {
+  .formwrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
 </style>

@@ -4,7 +4,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import HomeView from './components/Views/HomeView.vue'
 import LoginView from './components/Views/LoginView.vue'
 import DataView from './components/Views/DataView.vue'
-import UserManagement from './components/Views/UserManagment.vue';
+import UserManagementView from './components/Views/UserManagmentView.vue';
 
 const routes = [
   { path: '/', component: LoginView, },
@@ -12,7 +12,7 @@ const routes = [
   { path: '/data', component: DataView, meta: { requiresAuth: true }, },
   { 
     path: '/usermanagement',
-    component: UserManagement,
+    component: UserManagementView,
     beforeEnter: (to, from, next) => {
       const token = localStorage.getItem('token');
       if (token) {

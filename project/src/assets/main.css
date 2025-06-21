@@ -21,6 +21,36 @@ a,
     text-underline-offset: 0.3rem;
   }
 
+.formwrapper {
+  width: 30%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    gap: 0.5em;
+  }
+
+button {
+  background-color: #1e1e55;
+  border-radius: 8px;
+  border-style: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  padding: 10px 16px;
+  text-align: center;
+  transition: color 100ms;
+}
+
+button:hover,
+button:focus {
+  background-color: #4b4b72;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);

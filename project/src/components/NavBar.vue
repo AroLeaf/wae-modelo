@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar">
-    <div class="logo">Navbar</div>
+    <div class="logo">
+      <img :src="logo" alt="Grupo Modelo">
+    </div>
 
     <div class="hamburger" :class="{ open: isOpen }" @click="toggleMenu">
       <span></span>
@@ -11,20 +13,33 @@
     <ul  class="nav-links" :class="{ open: isOpen }">
       <li><RouterLink v-if="authenticated" to="/home">Home</RouterLink></li>
       <li><RouterLink v-if="authenticated" to="/data">Data</RouterLink></li>
-      <li><RouterLink v-if="authenticated" to="/usermanagement">User Management</RouterLink></li>
+      <li v-if="currentUser.admin"><RouterLink to="/usermanagement">User Management</RouterLink></li>
       <li><RouterLink v-if="authenticated" to="/" @click="logout">Log out</RouterLink></li>
     </ul>
   </nav>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, reactive } from 'vue'
+import logo from '@/assets/modelo-logo.png'
 
+const currentUser = reactive({ name: '', admin: false });
 const isOpen = ref(false)
-
 const emit = defineEmits(['logout']);
 
-const props = defineProps(['authenticated']);
+const props = defineProps(['authenticated','token']);
+
+watch( () => props.token, (newToken) => {
+  if (newToken) {
+      const storedToken = props.token;
+      const payload = JSON.parse(atob(storedToken.split('.')[1]));
+      currentUser.name = payload.name;
+      currentUser.admin = payload.admin;
+  } else {
+      currentUser.name = '';
+      currentUser.admin = false;
+  }
+}, {immediate: true});
 
 function toggleMenu() {
   isOpen.value = !isOpen.value
@@ -32,9 +47,13 @@ function toggleMenu() {
 
 function logout() {
     localStorage.removeItem('token');
+    currentUser.name = '';
+    currentUser.admin = false;
     emit('logout')
   }
+
 </script>
+
 
 <style scoped>
 .navbar {
@@ -51,6 +70,13 @@ function logout() {
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+   height: 4.7rem;
+}
+
+.logo img {
+  max-width: 100%;
+  max-height: 100%;
+ 
 }
 
 .hamburger {

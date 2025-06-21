@@ -65,17 +65,6 @@ async function login() {
   loading.value = false;
 }
 
-function logout() {
-  token.value = '';
-  localStorage.removeItem('token');
-  users.length = 0;
-  currentUser.name = '';
-  currentUser.admin = false;
-  message.value = '';
-  error.value = '';
-  router.push('/');
-}
-
 // haal gebruikerslijst op
 async function fetchUsers() {
   error.value = '';
@@ -210,7 +199,6 @@ onMounted(() => {
 <template>
   <div>
     <div class="user-management">
-      <h2>User Management</h2>
 
       <div v-if="!ready">
         <p>Loading...</p>
@@ -226,49 +214,58 @@ onMounted(() => {
         </div>
 
         <div v-else>
-          <button @click="logout">Logout</button>
-          <p>Logged in als: <strong>{{ currentUser.name }}</strong> <span v-if="currentUser.admin">(Admin)</span></p>
-
-          <h3>Users</h3>
-          <button @click="fetchUsers" :disabled="loading">Refresh</button>
-
-          <table border="1" cellpadding="5" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Admin</th>
-                <th>Password</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(user, index) in users" :key="user.name">
-                <td><input v-model="user.name" :disabled="!editMode[index]" /></td>
-                <td><input type="checkbox" v-model="user.admin" :disabled="!editMode[index]" /></td>
-                <td><input v-model="user.password" type="password" :disabled="!editMode[index]" placeholder="••••••" /></td>
-                <td>
-                  <button v-if="!editMode[index] && (user.name === currentUser.name || currentUser.admin)" @click="() => enableEdit(index)">Edit</button>
-                  <button v-if="editMode[index] && (user.name === currentUser.name  || currentUser.admin)" @click="() => saveUser(index)">Save</button>
-                  <button v-if="editMode[index]" @click="() => cancelEdit(index)">Cancel</button>
-                  <button v-if="editMode[index] && user.name !== currentUser.name " @click="() => deleteUser(user.name)" :disabled="!currentUser.admin">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h3>Create New User</h3>
-          <form @submit.prevent="createUser">
-            <input v-model="newUser.name" placeholder="Name" required />
-            <input v-model="newUser.password" type="password" placeholder="Password" required />
-            <label>
-              Admin:
-              <input type="checkbox" v-model="newUser.admin" />
-            </label>
-            <button type="submit" :disabled="loading || !currentUser.admin">Create</button>
-          </form>
-
-          <p v-if="message" class="message">{{ message }}</p>
-          <p v-if="error" class="error">{{ error }}</p>
+          <p class="nameHeader">currently logged in as: <strong>{{ currentUser.name }}</strong></p>
+          <div class="management">
+            <div class="users">
+              <div class="managementHeader">
+                <h3>Users</h3>
+                <button @click="fetchUsers" :disabled="loading">Refresh</button>
+              </div>
+              <p v-if="message" class="message">{{ message }}</p>
+              <p v-if="error" class="error">{{ error }}</p>
+              <div class="tablewrapper">
+                <table border="1" cellpadding="5" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Admin</th>
+                      <th>Password</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(user, index) in users" :key="user.name">
+                      <td><input v-model="user.name" :disabled="!editMode[index]" /></td>
+                      <td><input type="checkbox" v-model="user.admin" :disabled="!editMode[index]" /></td>
+                      <td><input v-model="user.password" type="password" :disabled="!editMode[index]"
+                          placeholder="••••••" /></td>
+                      <td>
+                        <button v-if="!editMode[index] && (user.name === currentUser.name || currentUser.admin)"
+                          @click="() => enableEdit(index)">Edit</button>
+                        <button v-if="editMode[index] && (user.name === currentUser.name || currentUser.admin)"
+                          @click="() => saveUser(index)">Save</button>
+                        <button v-if="editMode[index]" @click="() => cancelEdit(index)">Cancel</button>
+                        <button v-if="editMode[index] && user.name !== currentUser.name"
+                          @click="() => deleteUser(user.name)" :disabled="!currentUser.admin">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="userCreation">
+              <h3>Create New User</h3>
+              <form @submit.prevent="createUser">
+                <input v-model="newUser.name" placeholder="Name" type="text" required />
+                <input v-model="newUser.password" type="password" placeholder="Password" required />
+                <label>
+                  Admin:
+                  <input type="checkbox" v-model="newUser.admin" />
+                </label>
+                <button type="submit" :disabled="loading || !currentUser.admin">Create</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -276,28 +273,81 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.nameHeader {
+  padding: 3rem;
+  text-align: center;
+  font-size: larger;
+}
 .user-management {
-  max-width: 800px;
+  max-width: 85%;
   margin: auto;
   font-family: Arial, sans-serif;
+}
+
+.management {
+  display: flex;
+  gap: 5rem;
+}
+
+.users {
+  flex-grow: 1;
+}
+.managementHeader {
+  text-align: center;
 }
 input[type="text"], input[type="password"] {
   padding: 6px;
   margin: 4px 0;
 }
-button {
-  margin: 4px;
-  padding: 6px 12px;
+
+.userCreation {
+  width: 30%;
 }
+
 .error {
   color: red;
 }
 .message {
   color: green;
 }
+
+.tablewrapper {
+  display: block;
+  overflow-x: scroll;
+}
 table {
   width: 100%;
   margin: 10px 0;
   border-collapse: collapse;
+}
+
+table td {
+  text-align: center;
+}
+
+
+
+.management h3 {
+  text-align: center;
+}
+
+.tablewrapper button {
+  margin: 0.3em;
+}
+
+@media (max-width: 1000px) {
+  .management {
+    flex-direction: column-reverse;
+    gap: 2rem;
+  }
+
+  .userCreation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
 }
 </style>
