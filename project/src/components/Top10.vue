@@ -13,21 +13,18 @@
     async function configTop10(){
         const data = await fetchData('http://localhost:8080/queries/WAE/1'); //get top10
         const top10measurements = getTop10(data);
-        console.log(top10measurements);
         await matchMeasurementsAndStations(top10measurements);
         
     }
 
     async function matchMeasurementsAndStations(measurements) {
-        const enriched = await Promise.all(measurements.map(async (measurement) => {
+        top10.value = await Promise.all(measurements.map(async (measurement) => {
             const station = await fetchData('http://localhost:8080/stations/' + measurement.station);
             return {
                 station: station.nearest_location.name,
                 temperature: (measurement.temperature.toFixed(1))
             };
         }));
-
-        top10.value = enriched;
     }
 
     function getTop10(jsonndata) {
