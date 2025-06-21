@@ -31,11 +31,11 @@ async function login() {
 
     const jwtToken = await res.text();
     localStorage.setItem('token', jwtToken);
+    emit('authenticated');
     router.push('/home');
   } catch (err) {
     error.value = 'Login mislukt. Probeer het opnieuw.';
   } finally {
-    emit('authenticated');
     loading.value = false;
   }
 }
