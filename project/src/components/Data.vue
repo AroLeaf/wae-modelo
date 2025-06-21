@@ -225,7 +225,7 @@ async function fetchData(){
       }
     })
     if (!response.ok) {
-      console.error('fout bij ophalen data: ', response.statusText);
+      console.error('Error while fetching data: ', response.statusText);
       return;
     }
     const newMeasurements = await response.json();
@@ -295,11 +295,11 @@ const formatHeader = (header) => {
     <div class="topPage">
       <div class="datefilter">
         <label>
-          Begin datum/tijd:
+          Start date/time:
           <input type="datetime-local" v-model="startDate"/>
         </label><br>
         <label>
-          Eind datum/tijd:
+          End date/time:
           <input type="datetime-local" v-model="endDate"/>
         </label>
       </div>
@@ -307,15 +307,15 @@ const formatHeader = (header) => {
         <input
             type="text"
             v-model="stationFilter"
-            placeholder="Filter op station nummer"
+            placeholder="Filter on station number"
         />
       </div>
       <div class="downloadXML">
-        <button @click="downloadXML">Download als XML</button>
+        <button @click="downloadXML">Download as XML</button>
       </div>
       <div class="displayLimit">
         <label>
-          Aantal datapunten tonen:
+          Amount of data points shown:
           <input
               type="number"
               v-model.number="displayLimit"
@@ -403,6 +403,7 @@ const formatHeader = (header) => {
 }
 .downloadXML {
   order: 4;
+  background-color: transparent !important;
 }
 .displayLimit {
   order: 3;
