@@ -1,6 +1,6 @@
 <script setup>
     import { onMounted, ref, onBeforeUnmount } from 'vue';
-    import { fetchData } from './DataFetch.js'
+    import { fetchData } from './services/DataFetch.js'
 
     const top10 = ref([]);
     let intervalId = null;

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import datatest from '../../../IWA/data/datatest.json'
-import { fetchData } from './DataFetch.js'
+import { fetchData } from './services/DataFetch.js'
 
 const dataMap = datatest.MexicoStates.map(state =>({ //test data
   name: state.name,

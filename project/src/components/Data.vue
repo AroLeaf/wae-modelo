@@ -1,5 +1,6 @@
 <script setup>
 import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
+import { fetchData } from './services/DataFetch.js'
 
 const headers= ref ([
   'station',
@@ -216,40 +217,25 @@ function sortBy(header) {
   })
 }
 
-async function fetchData(){
-  const token = localStorage.getItem('token');
-  try {
-    const response = await fetch('http://localhost:8080/queries/WAE/0', {
-      headers: {
-        'Authorization': token
-      }
-    })
-    if (!response.ok) {
-      console.error('Error while fetching data: ', response.statusText);
-      return;
-    }
-    const newMeasurements = await response.json();
-    //check on dubble data
-    newMeasurements.forEach(item => {
-      if (!data.value.some(d => d.timestamp === item.timestamp && d.station === item.station)) {
-        data.value.push(item);
-      }
-    });
-  } catch (err){
-    console.error('fetch error', err);
-  }
-}
-
 let intervalId = null;
 
 onMounted(() => {
-  fetchData();
-  intervalId = setInterval(fetchData, 5000);
+  setData();
+  intervalId = setInterval(setData, 5000);
 });
 
 onBeforeUnmount(() => {
   if (intervalId) clearInterval(intervalId);
 });
+
+async function setData() {
+  const newMeasurements = await fetchData('http://localhost:8080/queries/WAE/0');
+  newMeasurements.forEach(item => {
+      if (!data.value.some(d => d.timestamp === item.timestamp && d.station === item.station)) {
+        data.value.push(item);
+      }
+    });
+}
 
 const downloadXML = () => {
   const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
