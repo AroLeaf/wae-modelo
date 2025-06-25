@@ -52,7 +52,6 @@ async function calculateAverage(measurements) {
   }));
 
   map.value = averaged;
-  console.log(map.value);
 }
 
 function getMapData(jsonndata) {
